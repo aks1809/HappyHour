@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './homepage.css';
 
+const api_key = 'AIzaSyDQmZgn1ZYJNblexWz6kxAxygVS4yahVmQ';
+const video_http = 'https://www.googleapis.com/youtube/v3/videos?';
+
 const Homepage = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = () => {
+      fetch(
+        video_http +
+          new URLSearchParams({
+            key: api_key,
+            part: 'snippet',
+            chart: 'mostPopular',
+            maxResults: 50,
+            regionCode: 'IN',
+          })
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data);
+        })
+        .catch((err) => console.log(err));
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(data);
+
   return (
     <div>
       <nav class="navbar">
@@ -93,24 +122,34 @@ const Homepage = () => {
 
       {/* <!-- videos --> */}
       <div class="video-container">
-        <div class="video">
-          <img src="assets/img/profile-pic.png" class="thumbnail" alt="" />
-          <div class="content">
-            <img src="assets/img/profile-pic.png" class="channel-icon" alt="" />
-            <div class="info">
-              <h4 class="title">first video | 2022</h4>
-              <p class="channel-name">modern web</p>
-            </div>
-          </div>
-        </div>
+        {data
+          ? data?.items?.map((e, index) => {
+              return (
+                <div
+                  class="video"
+                  style={{ cursor: 'pointer' }}
+                  key={index}
+                  onClick={() =>
+                    window.open(`https://youtube.com/watch?v=${e.id}`, '_blank')
+                  }
+                >
+                  <img
+                    src={e.snippet.thumbnails.high.url}
+                    class="thumbnail"
+                    alt=""
+                  />
+                  <div class="content">
+                    <img src={e.channelThumbnail} class="channel-icon" alt="" />
+                    <div class="info">
+                      <h4 class="title">{e.snippet.title}</h4>
+                      <p class="channel-name">{e.snippet.channelTitle}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          : null}
       </div>
-      {/* <Helmet>
-        <script
-          src="https://apis.google.com/js/api.js"
-          type="text/javascript"
-        />
-        <script src="app1.js" type="text/javascript" />
-      </Helmet> */}
     </div>
   );
 };
