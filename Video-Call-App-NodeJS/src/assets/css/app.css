@@ -91,22 +91,19 @@
     visibility: visible;
 }
 
+canvas{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+}
 
 .local-video{
     bottom: 0;
     left: 0;
     position: fixed;
-    width:15vw;
+    height: 200px;
+    width: 266px;
 }
-
-
-.mirror-mode{
-    -ms-transform: scaleX(-1);
-    -moz-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-
 
 .sender-info{
     font-size: smaller;
@@ -219,7 +216,14 @@
 
 
     .local-video{
-        width:40vw;
+        height: 200px;
+        width: 266px;
+    }
+
+    canvas{
+        bottom: 0;
+        left: 0;
+        position: fixed;
     }
 }
 
